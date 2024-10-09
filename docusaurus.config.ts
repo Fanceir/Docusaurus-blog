@@ -1,142 +1,151 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
-import type * as Preset from '@docusaurus/preset-classic';
+import { themes as prismThemes } from "prism-react-renderer";
+import type { Config } from "@docusaurus/types";
+import type * as Preset from "@docusaurus/preset-classic";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import social from "./data/social";
+import type { GiscusConfig } from "./src/components/Comment";
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
+    title: "My Site",
+    tagline: "Dinosaurs are cool",
+    favicon: "img/favicon.ico",
 
-  // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+    url: "https://your-docusaurus-site.example.com",
+    //这里设置为你部署后的域名
+    baseUrl: "/",
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+    organizationName: "Fanceir", // 你的github用户名或者组织名
+    projectName: "blog", // 通常是你的项目名，比如blog
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+    onBrokenLinks: "warn",
+    onBrokenMarkdownLinks: "warn",
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
-  i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
-  },
+    // Even if you don't use internationalization, you can use this field to set
+    // useful metadata like html lang. For example, if your site is Chinese, you
+    // may want to replace "en" with "zh-Hans".
+    i18n: {
+        defaultLocale: "zh-CN",
+        locales: ["zh-CN"],
+    },
 
-  presets: [
-    [
-      'classic',
-      {
-        docs: {
-          sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
-        theme: {
-          customCss: './src/css/custom.css',
-        },
-      } satisfies Preset.Options,
+    presets: [
+        [
+            "@docusaurus/preset-classic",
+            {
+                docs: {
+                    path: "docs",
+                    sidebarPath: "sidebars.ts",
+                    remarkPlugins: [remarkMath],
+                    rehypePlugins: [rehypeKatex],
+                },
+                blog: false,
+                theme: {
+                    customCss: ["./src/css/custom.css"],
+                },
+                sitemap: {
+                    priority: 0.5,
+                },
+                //这个可以在谷歌分析中找到https://analytics.google.com/analytics/
+                gtag: {
+                    trackingID: "G-ZBLQKV430M",
+                    anonymizeIP: true,
+                },
+                debug: process.env.NODE_ENV === "development",
+            },
+        ],
     ],
-  ],
 
-  themeConfig: {
-    // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
-    navbar: {
-      title: 'My Site',
-      logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
-      },
-      items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Tutorial',
+    themeConfig: {
+        // Replace with your project's social card
+        image: "img/docusaurus-social-card.jpg",
+        navbar: {
+            title: "Blog template",
+            logo: {
+                alt: "My Site Logo",
+                src: "img/logo.webp",
+                srcDark: "img/logo.webp",
+            },
+            hideOnScroll: true, //滚动时隐藏导航栏
+            items: [
+                { label: "博客", position: "right", to: "blog" },
+                { label: "项目", position: "right", to: "project" },
+                { label: "友链", position: "right", to: "friends" },
+                { label: "关于", position: "right", to: "about" },
+                {
+                    label: "更多",
+                    position: "right",
+                    items: [
+                        { label: "归档", to: "blog/archive" },
+                        { label: "笔记", to: "docs/skill" },
+                    ],
+                },
+
+                //以上是导航栏的配置如果要使用下拉菜单可以考虑上面的更多选项
+            ],
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
-        {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
-          position: 'right',
+        footer: {
+            style: "dark",
+            links: [
+                {
+                    title: "学习",
+                    items: [
+                        { label: "博客", to: "blog" },
+                        { label: "笔记", to: "docs/skill" },
+                        { label: "项目", to: "project" },
+                    ],
+                },
+                {
+                    title: "社交媒体",
+                    items: [
+                        {
+                            label: "关于我",
+                            to: "/about",
+                        },
+                        { label: "GitHub", href: social.github.href },
+                    ],
+                },
+                {
+                    title: "网站",
+                    items: [
+                        {
+                            label: "Github",
+                            to: "https://github.com",
+                        },
+                        {
+                            label: "Docusaurus",
+                            to: "https://docusaurus.io",
+                        },
+                    ],
+                },
+                {
+                    title: "More",
+                    items: [
+                        {
+                            label: "Blog",
+                            to: "/blog",
+                        },
+                        {
+                            label: "GitHub",
+                            href: "https://github.com/facebook/docusaurus",
+                        },
+                    ],
+                },
+            ],
+            copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
         },
-      ],
+        prism: {
+            theme: prismThemes.github,
+            darkTheme: prismThemes.dracula,
+        },
+        giscus: {
+            repo: "Fanceir/Docusaurus-blog",
+            repoId: "R_kgDOM9p0tA",
+            category: "General",
+            categoryId: "DIC_kwDOM9p0tM4CjNOu",
+            theme: "light",
+            darkTheme: "dark",
+        } satisfies Partial<GiscusConfig>,
     },
-    footer: {
-      style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
-    },
-    prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
-    },
-  } satisfies Preset.ThemeConfig,
 };
 
 export default config;
